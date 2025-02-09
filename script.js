@@ -53,16 +53,22 @@ function GameController(name1, name2) {
 
     const checkWin = (symbol) => {
         const matrix = board.getBoard();
-        const rows = matrix.every((row) => row.every((cell) => cell === symbol));
-        const cols = matrix.every((col) => col.every((cell) => cell === symbol));
+        for (let i = 0; i < matrix.length; i++) {
+            if (matrix[i].every(cell => cell === symbol)) {
+                return true;
+            }
+            if (matrix.every(row => row[i] === symbol)) {
+                return true;
+            }
+        }
         const diagonal1 = matrix.every((row, i) => row[i] === symbol);
         const diagonal2 = matrix.every((row, i) => row[matrix.length - i - 1] === symbol);
-        return rows || cols || diagonal1 || diagonal2;
+        return diagonal1 || diagonal2;
     }
 
     const playRound = (row, col) => {
         if (board.getBoard()[row][col] !== " ") {
-            console.log("Cell already marked");
+            console.log("illegal move");
             return;
         }
         board.markCell(row, col, getActivePlayer());
@@ -79,8 +85,8 @@ function GameController(name1, name2) {
 }
 
 const game = GameController("Player 1", "Player 2");
+game.playRound(0, 2);
+game.playRound(1, 1);
+game.playRound(0, 1);
+game.playRound(1, 0);
 game.playRound(0, 0);
-game.playRound(1, 1);
-game.playRound(1, 1);
-game.playRound(1, 2);
-game.playRound(2, 2);
