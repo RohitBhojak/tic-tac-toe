@@ -6,7 +6,7 @@ function GameBoard() {
     for (let i = 0; i < size; i++) {
         board[i] = [];
         for (let j = 0; j < size; j++) {
-            board[i][j] = "";
+            board[i][j] = " ";
         }
     }
 
@@ -25,10 +25,10 @@ function Player(name, symbol) {
     return { name, symbol };
 }
 
-function GameController(player1, player2) {
+function GameController(name1, name2) {
     const board = GameBoard();
-    const player1 = Player(player1 || "Player 1", "X");
-    const player2 = Player(player2 || "Player 2", "O");
+    const player1 = Player(name1 || "Player 1", "X");
+    const player2 = Player(name2 || "Player 2", "O");
 
     let activePlayer = player1;
 
@@ -45,22 +45,26 @@ function GameController(player1, player2) {
     }
 
     const printBoard = () => {
-        const board = board.getBoard();
-        for (let i = 0; i < board.length; i++) {
-            console.log(board[i].join(" | "));
+        const matrix = board.getBoard();
+        for (let i = 0; i < matrix.length; i++) {
+            console.log(matrix[i].join(" | "));
         }
     }
 
     const checkWin = (symbol) => {
-        const board = board.getBoard();
-        const rows = board.every((row) => row.every((cell) => cell === symbol));
-        const cols = board.every((col) => col.every((cell) => cell === symbol));
-        const diagonal1 = board.every((row, i) => row[i] === symbol);
-        const diagonal2 = board.every((row, i) => row[board.length - i - 1] === symbol);
+        const matrix = board.getBoard();
+        const rows = matrix.every((row) => row.every((cell) => cell === symbol));
+        const cols = matrix.every((col) => col.every((cell) => cell === symbol));
+        const diagonal1 = matrix.every((row, i) => row[i] === symbol);
+        const diagonal2 = matrix.every((row, i) => row[matrix.length - i - 1] === symbol);
         return rows || cols || diagonal1 || diagonal2;
     }
 
     const playRound = (row, col) => {
+        if (board.getBoard()[row][col] !== " ") {
+            console.log("Cell already marked");
+            return;
+        }
         board.markCell(row, col, getActivePlayer());
         printBoard();
         if (checkWin(getActivePlayer().symbol)) {
@@ -75,3 +79,8 @@ function GameController(player1, player2) {
 }
 
 const game = GameController("Player 1", "Player 2");
+game.playRound(0, 0);
+game.playRound(1, 1);
+game.playRound(1, 1);
+game.playRound(1, 2);
+game.playRound(2, 2);
