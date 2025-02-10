@@ -1,4 +1,4 @@
-// Factory function for gameboard
+// Factory function for gameboard, initiatializes board and marks cell
 function GameBoard() {
     const size = 3;
     const board = [];
@@ -21,19 +21,23 @@ function GameBoard() {
     return { getBoard, markCell };
 }
 
+// Factory function for player, creates player object
 function Player(name, symbol) {
     return { name, symbol };
 }
 
+// Factory function for game
 function GameController(name1, name2) {
     const board = GameBoard();
     const player1 = Player(name1 || "Player 1", "X");
     const player2 = Player(name2 || "Player 2", "O");
 
     let activePlayer = player1;
+    let turn = 1;
 
     const switchPlayer = () => {
         activePlayer = activePlayer === player1 ? player2 : player1;
+        turn++;
     }
 
     const getActivePlayer = () => {
@@ -67,16 +71,27 @@ function GameController(name1, name2) {
     }
 
     const playRound = (row, col) => {
+        // Check if cell is empty
         if (board.getBoard()[row][col] !== " ") {
             console.log("illegal move");
             return;
         }
+
+        // mark cell
         board.markCell(row, col, getActivePlayer());
         printBoard();
+
+        // check win and log winner
         if (checkWin(getActivePlayer().symbol)) {
             console.log(`${getActivePlayer().name} wins!`);
             return;
         }
+
+        if (turn == Math.pow(board.getBoard().length, 2)) {
+            console.log("Draw!");
+            return;
+        }
+        
         switchPlayer();
         printTurn();
     }
@@ -85,8 +100,12 @@ function GameController(name1, name2) {
 }
 
 const game = GameController("Player 1", "Player 2");
-game.playRound(0, 2);
-game.playRound(1, 1);
-game.playRound(0, 1);
-game.playRound(1, 0);
 game.playRound(0, 0);
+game.playRound(0, 1);
+game.playRound(0, 2);
+game.playRound(1, 0);
+game.playRound(1, 2);
+game.playRound(1, 1);
+game.playRound(2, 0);
+game.playRound(2, 2);
+game.playRound(2, 1);
