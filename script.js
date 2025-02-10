@@ -31,6 +31,7 @@ function GameController(name1, name2) {
     const board = GameBoard();
     const player1 = Player(name1 || "Player 1", "X");
     const player2 = Player(name2 || "Player 2", "O");
+    const turnDiv = document.querySelector(".turn");
 
     let activePlayer = player1;
     let turn = 1;
@@ -46,6 +47,7 @@ function GameController(name1, name2) {
 
     const printTurn = () => {
         console.log(`${getActivePlayer().name}'s turn`);
+        turnDiv.textContent = `${getActivePlayer().name}'s turn`;
     }
 
     const printBoard = () => {
@@ -99,8 +101,15 @@ function GameController(name1, name2) {
     return { playRound, getActivePlayer, getBoard: board.getBoard };
 }
 
+const game = GameController();
+
+game.playRound(0, 0);
+game.playRound(0, 1);
+
 function ScreenController() {
     const info = document.querySelector(".info");
     const board = document.querySelector(".board");
-}
 
+    const startScreen = document.querySelector(".start-screen");
+
+}
