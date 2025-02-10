@@ -5,8 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic-Tac-Toe</title>
     <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
 </head>
 <body>
-    
+    <!-- header -->
+    <div class="header">
+        <h1>Warrior's Tic-Tac-Toe</h1>
+    </div>
+
+    <!-- start screen dialog -->
+    <dialog class="start-screen">
+        <h2>Enter Player Names:</h2>
+        <form>
+            <label for="player1">Player 1 Name:</label>
+            <input type="text" id="player1" name="player1" value="Player 1">
+            <label for="player2">Player 2 Name:</label>
+            <input type="text" id="player2" name="player2" value="Player 2">
+            <button type="submit">Start Game</button>
+        </form>
+    </dialog>
+
+    <!-- main -->
+    <div class="main">
+
+        <div class="info">
+            <button class="edit-name">Edit Name</button>
+            <div class="turn">Turn</div>
+            <button class="restart">Restart</button>
+        </div>
+
+        <div class="board"></div>
+    </div>
+
+    <!-- end screen dialog -->
+    <dialog class="end-screen">
+        <p class="message"></p>
+        <button class="end-screen">Play Again</button>
+        <button class="quit">Cancel</button>
+    </dialog>
+
+    <!-- footer -->
+    <div class="footer">Copyright &copy; Rohit Singh Bhojak 2025</div>
 </body>
 </html>

@@ -96,16 +96,11 @@ function GameController(name1, name2) {
         printTurn();
     }
 
-    return { playRound };
+    return { playRound, getActivePlayer, getBoard: board.getBoard };
 }
 
-const game = GameController("Player 1", "Player 2");
-game.playRound(0, 0);
-game.playRound(0, 1);
-game.playRound(0, 2);
-game.playRound(1, 0);
-game.playRound(1, 2);
-game.playRound(1, 1);
-game.playRound(2, 0);
-game.playRound(2, 2);
-game.playRound(2, 1);
+function ScreenController() {
+    const info = document.querySelector(".info");
+    const board = document.querySelector(".board");
+}
+
