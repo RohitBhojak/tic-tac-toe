@@ -142,6 +142,7 @@ function GameController(name1, name2) {
             getActivePlayer().addWin();
             getActivePlayer().id === 1 ? player1score.textContent = getActivePlayer().getWin() : player2score.textContent = getActivePlayer().getWin();
             board.resetBoard();
+            toggleStartingPlayer();
             resetTurn();
         }
 
@@ -152,6 +153,7 @@ function GameController(name1, name2) {
             draw++;
             drawscore.textContent = draw;
             board.resetBoard();
+            toggleStartingPlayer();
             resetTurn();
         }
         
