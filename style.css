@@ -201,10 +201,16 @@ button {
     background-color: var(--primary-color);
 }
 
-.set-x {
+.X {
     background: url(./assets/sword-cross.svg);
 }
 
-.set-y {
+.O {
     background: url(./assets/shield.svg);
+}
+
+.X, .O {
+    background-size: 70%;
+    background-position: center;
+    background-repeat: no-repeat;
 }
