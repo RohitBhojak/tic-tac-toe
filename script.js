@@ -1,21 +1,25 @@
 // Factory function for gameboard, initiatializes board and marks cell
 function GameBoard() {
+    // variables
     const size = 3;
     const board = [];
 
+    // method to reset board
     const resetBoard = () => {
         for (let i = 0; i < size; i++) {
             board[i] = [];
             for (let j = 0; j < size; j++) {
-                board[i][j] = "";
+                board[i][j] = " ";
             }
         }
     }
 
+    // method to get board
     const getBoard = () => {
         return board;
     }
 
+    // method to mark cell
     const markCell = (row, col, player) => {
         board[row][col] = player.symbol;
     }
@@ -40,6 +44,7 @@ function Player(id, name, symbol) {
 
 // Factory function for game
 function GameController(name1, name2) {
+    // variables
     const board = GameBoard();
     const player1 = Player(1, name1 || "Player 1", "X");
     const player2 = Player(2, name2 || "Player 2", "O");
@@ -49,28 +54,42 @@ function GameController(name1, name2) {
     const player2score = document.querySelector(".player2 .score");
 
     let draw = 0;
-    let activePlayer = player1.symbol == "X" ? player1 : player2;
+    let startingPlayer = player1;
+    let activePlayer = startingPlayer;
     let turn = 1;
 
+    // method to reset turn on new game
     const resetTurn = () => {
         turn = 1;
-    }
+        activePlayer = startingPlayer; // Reset to Player 1 as the starting player
+        turnDiv.textContent = `${activePlayer.name}'s turn`; // Update UI
+    };
 
+    // method to switch active player after every turn
     const switchPlayer = () => {
         activePlayer = activePlayer === player1 ? player2 : player1;
         turnDiv.textContent = `${activePlayer.name}'s turn`;
         turn++;
     }
 
+    // Method to toggle the starting player
+    const toggleStartingPlayer = () => {
+        startingPlayer = (startingPlayer === player1) ? player2 : player1;
+        activePlayer = startingPlayer;
+    };
+
+    // method to get active player
     const getActivePlayer = () => {
         return activePlayer;
     }
 
+    // method to print turn
     const printTurn = () => {
         console.log(`${getActivePlayer().name}'s turn`);
         turnDiv.textContent = `${getActivePlayer().name}'s turn`;
     }
 
+    // method to print board on console
     const printBoard = () => {
         const matrix = board.getBoard();
         for (let i = 0; i < matrix.length; i++) {
@@ -78,24 +97,29 @@ function GameController(name1, name2) {
         }
     }
 
+    // method to check win
     const checkWin = (symbol) => {
         const matrix = board.getBoard();
         for (let i = 0; i < matrix.length; i++) {
+            // check for rows
             if (matrix[i].every(cell => cell === symbol)) {
                 return true;
             }
+            // check for columns
             if (matrix.every(row => row[i] === symbol)) {
                 return true;
             }
         }
+        // check for diagonalss
         const diagonal1 = matrix.every((row, i) => row[i] === symbol);
         const diagonal2 = matrix.every((row, i) => row[matrix.length - i - 1] === symbol);
         return diagonal1 || diagonal2;
     }
 
+    // method to play round
     const playRound = (row, col) => {
         // Check if cell is empty
-        if (board.getBoard()[row][col] !== "") {
+        if (board.getBoard()[row][col] !== " ") {
             console.log("illegal move");
             return;
         }
@@ -104,7 +128,7 @@ function GameController(name1, name2) {
         board.markCell(row, col, getActivePlayer());
         printBoard();
 
-        // check win and log winner
+        // check win and update score
         if (checkWin(getActivePlayer().symbol)) {
             console.log(`${getActivePlayer().name} wins!`);
             getActivePlayer().addWin();
@@ -113,7 +137,8 @@ function GameController(name1, name2) {
             resetTurn();
         }
 
-        if (turn == Math.pow(board.getBoard().length, 2)) {
+        // check draw and update score
+        if (turn == Math.pow(board.getBoard().length, 2) + 1) {
             console.log("Draw!");
             draw++;
             drawscore.textContent = draw;
@@ -125,20 +150,33 @@ function GameController(name1, name2) {
         printTurn();
     }
 
-    return { playRound, getActivePlayer, getBoard: board.getBoard, resetBoard: board.resetBoard };
+    return { playRound, getActivePlayer, getBoard: board.getBoard, resetBoard: board.resetBoard, resetTurn, toggleStartingPlayer };
 }
 
 function ScreenController() {
+    // variables
     const startScreen = document.querySelector(".start-screen");
     const boardDiv = document.querySelector(".board");
     const restart = document.querySelector(".restart");
     const newGame = document.querySelector(".new-game");
 
-    const game = GameController();
+    let game;
 
+    // method to initialize game
+    const initializeGame = (player1Name, player2Name) => {
+        game = GameController(player1Name, player2Name);
+    
+        resetResult();
+        updatePlayerNames(player1Name, player2Name);
+        game.resetTurn();
+        createBoard();
+    };
+    
     // events for game startup
 
+    // method to create board on game startup
     const createBoard = () => {
+        boardDiv.innerHTML = ""; // Clear previous board
         for (let i = 0; i < game.getBoard().length; i++) {
             for (let j = 0; j < game.getBoard().length; j++) {
                 cell = document.createElement("div");
@@ -150,61 +188,90 @@ function ScreenController() {
         }
     }
     
+    // Handles form submission
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const player1Name = document.querySelector("#player1").value || "Player 1";
+        const player2Name = document.querySelector("#player2").value || "Player 2";
+        startScreen.close();
+        initializeGame(player1Name, player2Name);
+    };
+
+    // Handles ESC key (dialog cancellation)
+    const handleCancel = (e) => {
+        e.preventDefault(); // Prevents the default ESC behavior
+        startScreen.close();
+        initializeGame("Player 1", "Player 2"); // Defaults if ESC is pressed
+    };
+
+    // method to start dialog
     const startDialog = () => {
         startScreen.showModal();
         const form = startScreen.querySelector("form");
-        form.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const player1 = document.querySelector("#player1").value;
-            const player2 = document.querySelector("#player2").value;
-            startScreen.close();
-            resetResult();
-        });
-    }
+    
+        // Clean up old listeners to prevent duplicates
+        form.removeEventListener("submit", handleSubmit);
+        startScreen.removeEventListener("cancel", handleCancel);
+    
+        // Add fresh event listeners
+        form.addEventListener("submit", handleSubmit);
+        startScreen.addEventListener("cancel", handleCancel);
+    };
+    
 
+    // event listener for game startup
     document.addEventListener("DOMContentLoaded", () => {
         startDialog();
-        createBoard();
     });
 
+    // event listerner for new game
     newGame.addEventListener("click", () => {
         startDialog();
-        resetGameBoard();
     })
 
     // event for info buttons
+
+    // method to update game board
     const updateGameBoard = () => {
         const matrix = game.getBoard();
         for (let i = 0; i < matrix.length; i++) {
             for (let j = 0; j < matrix.length; j++) {
                 const cell = document.querySelector(`[data-row="${i}"][data-col="${j}"]`);
                 cell.classList.remove("X", "O");
-                if(matrix[i][j]) cell.classList.add(matrix[i][j]);
+                if(matrix[i][j] !== " ") cell.classList.add(matrix[i][j]);
             }
         }
     }
     
+    // method to reset game board
     const resetGameBoard = () => {
+        game.toggleStartingPlayer();
         game.resetBoard();
+        game.resetTurn();
         updateGameBoard();
     }
 
+    // method to update player names
+    const updatePlayerNames = (name1, name2) => {
+        document.querySelector(".player1 .name").textContent = name1;
+        document.querySelector(".player2 .name").textContent = name2;
+    };
+    
+    // method to reset result
     const resetResult = () => {
-        const player1ResultName = document.querySelector(".player1 .name");
-        const player2ResultName = document.querySelector(".player2 .name");
-        player1ResultName.textContent = game.getActivePlayer().name;
-        player2ResultName.textContent = game.getActivePlayer().name;
-        const player1ResultScore = document.querySelector(".player1 .score");
-        const player2ResultScore = document.querySelector(".player2 .score");
-        player1ResultScore.textContent = 0;
-        player2ResultScore.textContent = 0;
+        document.querySelector(".player1 .score").textContent = 0;
+        document.querySelector(".player2 .score").textContent = 0;
         document.querySelector(".draw .score").textContent = 0;
-    }
+    };
+    
+    
 
+    // event listener for restart round button
     restart.addEventListener("click", () => {
         resetGameBoard();
     });
     
+    // event listener for marking cells in board
     boardDiv.addEventListener("click", (e) => {
         if (e.target.classList.contains("cell")) {
             game.playRound(e.target.dataset.row, e.target.dataset.col);
