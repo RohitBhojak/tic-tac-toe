@@ -23,7 +23,15 @@ function GameBoard() {
 
 // Factory function for player, creates player object
 function Player(name, symbol) {
-    return { name, symbol };
+    let win = 0;
+    const addWin = () => {
+        win++;
+    }
+
+    const getWin = () => {
+        return win;
+    }
+    return { name, symbol, addWin, getWin };
 }
 
 // Factory function for game
@@ -32,8 +40,9 @@ function GameController(name1, name2) {
     const player1 = Player(name1 || "Player 1", "X");
     const player2 = Player(name2 || "Player 2", "O");
     const turnDiv = document.querySelector(".turn");
-
-    let activePlayer = player1;
+    
+    let draw = 0;
+    let activePlayer = player1.symbol == "X" ? player1 : player2;
     let turn = 1;
 
     const switchPlayer = () => {
@@ -55,6 +64,14 @@ function GameController(name1, name2) {
         for (let i = 0; i < matrix.length; i++) {
             console.log(matrix[i].join(" | "));
         }
+    }
+
+    const addDraw = () => {
+        draw++;
+    }
+    
+    const getDraw = () => {
+        return draw;
     }
 
     const checkWin = (symbol) => {
@@ -86,11 +103,13 @@ function GameController(name1, name2) {
         // check win and log winner
         if (checkWin(getActivePlayer().symbol)) {
             console.log(`${getActivePlayer().name} wins!`);
+            getActivePlayer().addWin();
             return;
         }
 
         if (turn == Math.pow(board.getBoard().length, 2)) {
             console.log("Draw!");
+            addDraw();
             return;
         }
         
@@ -98,18 +117,29 @@ function GameController(name1, name2) {
         printTurn();
     }
 
-    return { playRound, getActivePlayer, getBoard: board.getBoard };
+    return { playRound, getActivePlayer, getBoard: board.getBoard, getDraw };
 }
 
 const game = GameController();
 
 game.playRound(0, 0);
-game.playRound(0, 1);
 
 function ScreenController() {
     const info = document.querySelector(".info");
     const board = document.querySelector(".board");
 
     const startScreen = document.querySelector(".start-screen");
-
+    
+    const startDialog = () => {
+        startScreen.showModal();
+        const form = startScreen.querySelector("form");
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const player1 = document.querySelector("#player1").value;
+            const player2 = document.querySelector("#player2").value;
+            startScreen.close();
+        });
+    }
 }
+
+ScreenController();

@@ -8,6 +8,7 @@
 :root {
     font-size: 62.5%;
     --shadow-color: rgba(0, 0, 0, 0.4);
+    --shadow: 0px 8px 8px var(--shadow-color);
     --x-color: #00ADB5;
     --o-color: #F2B138;
     --primary-color: #a9bec8;
@@ -50,15 +51,62 @@ body {
     z-index: 100;
 }
 
+/* dialog */
+.start-screen {
+    height: 400px;
+    display: flex;
+    margin: auto;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: var(--shadow);
+    padding: 30px;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    font-size: 1.6rem;
+}
+
+.start-screen form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    font-size: 2rem;
+}
+
+.start-screen form input {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    box-shadow: var(--shadow);
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    font-size: 2rem;
+}
+
+.start-screen button {
+    margin-top: 30px;
+}
+
+::backdrop {
+    backdrop-filter: blur(5px);
+}
+
 /* main */
 .main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     flex: 1;
     padding: 30px;
 }
+
+/* info */
 
 .info {
     display: flex;
@@ -66,17 +114,21 @@ body {
     align-items: center;
     font-weight: bold;
     gap: 40px;
+    height: 50px;
 }
 
 button {
     cursor: pointer;
     border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: var(--primary-color);
     color: var(--secondary-color);
     font-size: 2rem;
     padding: 5px 10px;
     border-radius: 5px;
-    box-shadow: 0px 4px 4px var(--shadow-color);
+    box-shadow: var(--shadow);
     transition: all 0.2s ease-in-out;
     height: 100%;
     font-weight: bold;
@@ -92,10 +144,6 @@ button {
     }
 }
 
-.info {
-    height: 40px;
-}
-
 .turn {
     background-color: var(--secondary-color);
     font-size: 2.4rem;
@@ -103,6 +151,32 @@ button {
     align-items: center;
     height: 100%;
     border-radius: 5px;
-    box-shadow: 0px 4px 4px var(--shadow-color);
+    box-shadow: var(--shadow);
     padding: 0px 30px;
+}
+
+/* board */
+
+/* result */
+
+.result {
+    display: flex;
+    align-items: center;
+    font-size: 2.4rem;
+    gap: 20px;
+}
+
+.player1, .draw, .player2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 5px;
+    box-shadow: var(--shadow);
+    padding: 0 20px;
+    height: 80px;
+    width: 200px;
+    background-color: var(--secondary-color);
+    font-weight: bold;
 }

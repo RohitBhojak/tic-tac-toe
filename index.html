@@ -22,9 +22,9 @@
         <h2>Enter Player Names:</h2>
         <form>
             <label for="player1">Player 1 Name:</label>
-            <input type="text" id="player1" name="player1" value="Player 1">
+            <input type="text" id="player1" name="player1">
             <label for="player2">Player 2 Name:</label>
-            <input type="text" id="player2" name="player2" value="Player 2">
+            <input type="text" id="player2" name="player2">
             <button type="submit">Start Game</button>
         </form>
     </dialog>
@@ -39,14 +39,22 @@
         </div>
 
         <div class="board"></div>
-    </div>
 
-    <!-- end screen dialog -->
-    <dialog class="end-screen">
-        <p class="message"></p>
-        <button class="end-screen">Play Again</button>
-        <button class="quit">Cancel</button>
-    </dialog>
+        <div class="result">
+            <div class="player1">
+                <div class="name">Player 1</div>
+                <div class="score">0</div>
+            </div>
+            <div class="draw">
+                <div class="name">Draw</div>
+                <div class="score">0</div>
+            </div>
+            <div class="player2">
+                <div class="name">Player 2</div>
+                <div class="score">0</div>
+            </div>
+        </div>
+    </div>
 
     <!-- footer -->
     <div class="footer">Copyright &copy; Rohit Singh Bhojak 2025</div>
