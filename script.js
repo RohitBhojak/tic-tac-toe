@@ -120,15 +120,26 @@ function GameController(name1, name2) {
     return { playRound, getActivePlayer, getBoard: board.getBoard, getDraw };
 }
 
-const game = GameController();
-
-game.playRound(0, 0);
-
 function ScreenController() {
     const info = document.querySelector(".info");
-    const board = document.querySelector(".board");
-
     const startScreen = document.querySelector(".start-screen");
+    const boardDiv = document.querySelector(".board");
+
+    const game = GameController();
+
+    // events for game startup
+
+    const createBoard = () => {
+        for (let i = 0; i < game.getBoard().length; i++) {
+            for (let j = 0; j < game.getBoard().length; j++) {
+                cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.dataset.row = i;
+                cell.dataset.col = j;
+                boardDiv.appendChild(cell);
+            }
+        }
+    }
     
     const startDialog = () => {
         startScreen.showModal();
@@ -140,6 +151,12 @@ function ScreenController() {
             startScreen.close();
         });
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        startDialog();
+        createBoard();
+    });
+    
 }
 
 ScreenController();

@@ -19,12 +19,12 @@
 
     <!-- start screen dialog -->
     <dialog class="start-screen">
-        <h2>Enter Player Names:</h2>
         <form>
+            <h2>Enter Player Names:</h2>
             <label for="player1">Player 1 Name:</label>
-            <input type="text" id="player1" name="player1">
+            <input type="text" id="player1" name="player1" placeholder="Player 1">
             <label for="player2">Player 2 Name:</label>
-            <input type="text" id="player2" name="player2">
+            <input type="text" id="player2" name="player2" placeholder="Player 2">
             <button type="submit">Start Game</button>
         </form>
     </dialog>
@@ -41,7 +41,7 @@
         <div class="board"></div>
 
         <div class="result">
-            <div class="player1">
+            <div class="player1 turn-x">
                 <div class="name">Player 1</div>
                 <div class="score">0</div>
             </div>
@@ -49,14 +49,12 @@
                 <div class="name">Draw</div>
                 <div class="score">0</div>
             </div>
-            <div class="player2">
+            <div class="player2 turn-o">
                 <div class="name">Player 2</div>
                 <div class="score">0</div>
             </div>
         </div>
     </div>
 
-    <!-- footer -->
-    <div class="footer">Copyright &copy; Rohit Singh Bhojak 2025</div>
 </body>
 </html>
