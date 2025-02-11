@@ -41,7 +41,7 @@ body {
 }
 
 /* dialog */
-.start-screen {
+dialog {
     height: 400px;
     margin: auto;
     border-radius: 5px;
@@ -76,6 +76,28 @@ body {
 
 .start-screen button {
     margin-top: 30px;
+    padding: 10px;
+}
+
+/* end screen dialog */
+.end-screen {
+    height: 200px;
+    width: 300px;
+}
+
+.end-screen .game-over {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 80%;
+    align-items: center;
+    gap: 30px;
+    font-size: 2rem;
+}
+
+.end-screen .ok {
+    width: 30%;
+    padding: 10px;
 }
 
 ::backdrop {

@@ -56,11 +56,11 @@ function GameController(name1, name2) {
     let draw = 0;
     let startingPlayer = player1;
     let activePlayer = startingPlayer;
-    let turn = 1;
+    let turn = 0;
 
     // method to reset turn on new game
     const resetTurn = () => {
-        turn = 1;
+        turn = 0;
         activePlayer = startingPlayer; // Reset to Player 1 as the starting player
         turnDiv.textContent = `${activePlayer.name}'s turn`; // Update UI
     };
@@ -69,7 +69,6 @@ function GameController(name1, name2) {
     const switchPlayer = () => {
         activePlayer = activePlayer === player1 ? player2 : player1;
         turnDiv.textContent = `${activePlayer.name}'s turn`;
-        turn++;
     }
 
     // Method to toggle the starting player
@@ -85,16 +84,8 @@ function GameController(name1, name2) {
 
     // method to print turn
     const printTurn = () => {
-        console.log(`${getActivePlayer().name}'s turn`);
+        console.log(`${turn}`);
         turnDiv.textContent = `${getActivePlayer().name}'s turn`;
-    }
-
-    // method to print board on console
-    const printBoard = () => {
-        const matrix = board.getBoard();
-        for (let i = 0; i < matrix.length; i++) {
-            console.log(matrix[i].join(" | "));
-        }
     }
 
     // method to check win
@@ -118,6 +109,22 @@ function GameController(name1, name2) {
 
     // method to play round
     const playRound = (row, col) => {
+        // method to show game over message
+        const showGameOverMessage = (result) => {
+            const endScreen = document.querySelector(".end-screen");
+            endScreen.showModal();
+            const message = endScreen.querySelector(".message");
+            if (result === "draw") {
+                message.textContent = "Draw";
+            } else {
+                message.textContent = `${getActivePlayer().name} wins`;
+            }
+            const ok = endScreen.querySelector(".ok");
+            ok.addEventListener("click", () => {
+                endScreen.close();
+            });
+        }
+
         // Check if cell is empty
         if (board.getBoard()[row][col] !== " ") {
             console.log("illegal move");
@@ -126,11 +133,12 @@ function GameController(name1, name2) {
 
         // mark cell
         board.markCell(row, col, getActivePlayer());
-        printBoard();
+        turn++;
 
         // check win and update score
         if (checkWin(getActivePlayer().symbol)) {
             console.log(`${getActivePlayer().name} wins!`);
+            showGameOverMessage("win");
             getActivePlayer().addWin();
             getActivePlayer().id === 1 ? player1score.textContent = getActivePlayer().getWin() : player2score.textContent = getActivePlayer().getWin();
             board.resetBoard();
@@ -138,8 +146,9 @@ function GameController(name1, name2) {
         }
 
         // check draw and update score
-        if (turn == Math.pow(board.getBoard().length, 2) + 1) {
+        if (turn == Math.pow(board.getBoard().length, 2)) {
             console.log("Draw!");
+            showGameOverMessage("draw");
             draw++;
             drawscore.textContent = draw;
             board.resetBoard();
