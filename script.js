@@ -61,7 +61,7 @@ function GameController(name1, name2) {
     // method to reset turn on new game
     const resetTurn = () => {
         turn = 0;
-        activePlayer = startingPlayer; // Reset to Player 1 as the starting player
+        activePlayer = startingPlayer; // Reset to starting player
         turnDiv.textContent = `${activePlayer.name}'s turn`; // Update UI
     };
 
@@ -82,12 +82,6 @@ function GameController(name1, name2) {
         return activePlayer;
     }
 
-    // method to print turn
-    const printTurn = () => {
-        console.log(`${turn}`);
-        turnDiv.textContent = `${getActivePlayer().name}'s turn`;
-    }
-
     // method to check win
     const checkWin = (symbol) => {
         const matrix = board.getBoard();
@@ -105,6 +99,12 @@ function GameController(name1, name2) {
         const diagonal1 = matrix.every((row, i) => row[i] === symbol);
         const diagonal2 = matrix.every((row, i) => row[matrix.length - i - 1] === symbol);
         return diagonal1 || diagonal2;
+    }
+
+    const reset = () => {
+        toggleStartingPlayer();
+        board.resetBoard();
+        resetTurn();
     }
 
     // method to play round
@@ -141,27 +141,24 @@ function GameController(name1, name2) {
             showGameOverMessage("win");
             getActivePlayer().addWin();
             getActivePlayer().id === 1 ? player1score.textContent = getActivePlayer().getWin() : player2score.textContent = getActivePlayer().getWin();
-            board.resetBoard();
-            toggleStartingPlayer();
-            resetTurn();
+            
+            reset();
         }
 
         // check draw and update score
-        if (turn == Math.pow(board.getBoard().length, 2)) {
+        else if (turn == Math.pow(board.getBoard().length, 2)) {
             console.log("Draw!");
             showGameOverMessage("draw");
             draw++;
             drawscore.textContent = draw;
-            board.resetBoard();
-            toggleStartingPlayer();
-            resetTurn();
+            
+            reset();
         }
         
         switchPlayer();
-        printTurn();
     }
 
-    return { playRound, getActivePlayer, getBoard: board.getBoard, resetBoard: board.resetBoard, resetTurn, toggleStartingPlayer };
+    return { playRound, getActivePlayer, getBoard: board.getBoard, reset, resetTurn };
 }
 
 function ScreenController() {
@@ -256,9 +253,7 @@ function ScreenController() {
     
     // method to reset game board
     const resetGameBoard = () => {
-        game.toggleStartingPlayer();
-        game.resetBoard();
-        game.resetTurn();
+        game.reset();
         updateGameBoard();
     }
 

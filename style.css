@@ -181,7 +181,7 @@ button {
     border: 2px solid rgba(255, 255, 255, 0.2);
     box-shadow: var(--shadow);
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: transform 0.2s ease-out;
     
     &:active {
         transform: scale(0.9);
