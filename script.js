@@ -143,6 +143,7 @@ function GameController(name1, name2) {
             getActivePlayer().id === 1 ? player1score.textContent = getActivePlayer().getWin() : player2score.textContent = getActivePlayer().getWin();
             
             reset();
+            return;
         }
 
         // check draw and update score
@@ -153,6 +154,7 @@ function GameController(name1, name2) {
             drawscore.textContent = draw;
             
             reset();
+            return;
         }
         
         switchPlayer();
