@@ -163,7 +163,7 @@ function GameController(name1, name2) {
     return { playRound, getActivePlayer, getBoard: board.getBoard, reset, resetTurn };
 }
 
-function ScreenController() {
+const ScreenController = function() {
     // variables
     const startScreen = document.querySelector(".start-screen");
     const boardDiv = document.querySelector(".board");
@@ -286,6 +286,4 @@ function ScreenController() {
             updateGameBoard();
         }
     });
-}
-
-ScreenController();
+}();
